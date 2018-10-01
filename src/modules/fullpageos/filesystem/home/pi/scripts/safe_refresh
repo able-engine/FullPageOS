@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # This script attempts a refresh, but only if the requested page returns successfully.
+serial=$(cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2) && aehostdomain="https://battleaxes-api.ableengine.site/subscribe/"$serial
 
-url="$(cat /boot/fullpageos.txt)"
-
-curl --fail "$url" &> /dev/null
+curl --fail "$aehostdomain" &> /dev/null
 curlRetr="$?"
 
 if [[ "$curlRetr" -ne "0" ]]; then

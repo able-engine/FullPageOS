@@ -1,23 +1,7 @@
 #!/bin/bash
 
-SERIAL=`cat /proc/cpuinfo | perl -n -e '/^Serial[ ]*: ([0-9a-f]{16})$/ && print "$1\n"'`
+#serial=$(cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2) && aehostip=$(avahi-browse -d local _http._tcp --resolve -t | grep -A1 "Webpack Dev Server" | grep "hostname" | ping -q -c 1 -t 1 $(awk -F'[][]' '{print $2}') | grep PING | sed -e "s/).*//" | sed -e "s/.*(//") && nc -z $aehostip 3001 &> /dev/null; aepingtest=$? && if [[ $aepingtest = "0" ]]; then aehostdomain="http://$aehostip:3001?id="$serial; else aehostdomain="http://localhost/FullPageDashboard/battle.gif"; fi;
 
-# Standard behavior - runs chrome
-chromium-browser --kiosk --touch-events=enabled --disable-pinch --noerrdialogs --disable-session-crashed-bubble --app=$(head -n 1 /boot/fullpageos.txt | sed -e "s/{serial}/${SERIAL}/g")
-exit;
+serial=$(cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2) && aehostdomain="https://battleaxes-api.ableengine.site/subscribe/"$serial
 
-# Remove the two lines above to enable signage mode - refresh the browser whenever errors are seen in log
-
-chromium-browser --enable-logging --v=1 --kiosk --touch-events=enabled --disable-pinch --noerrdialogs --disable-session-crashed-bubble --app=$(head -n 1 /boot/fullpageos.txt | sed -e "s/{serial}/${SERIAL}/g") &
-
-export logfile="/home/pi/.config/chromium/chrome_debug.log"
-
-
-# Refreshes after a crash by watching logs
-tail -n 0 -f "$logfile" | while read LOGLINE &> /dev/null; do
-
-   echo "Refreshing after crash"
-   echo "Restarting at `date` after a reported crash. Logline: ${LOGLINE}" >> /tmp/crashlog
-   [[ "${LOGLINE}" == *"ERROR"* ]] && /home/pi/scripts/refresh
-
-done
+chromium-browser --kiosk --touch-events=enabled --disable-pinch --noerrdialogs --disable-session-crashed-bubble --app=$aehostdomain

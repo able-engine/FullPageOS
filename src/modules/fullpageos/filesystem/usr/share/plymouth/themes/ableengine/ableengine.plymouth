@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=AbleEngine
+Description=Custom theme by Able Engine with splash logo
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/ableengine
+ScriptFile=/usr/share/plymouth/themes/ableengine/ableengine.script
